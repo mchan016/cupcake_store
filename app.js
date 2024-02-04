@@ -1,4 +1,5 @@
 const express = require('express');
+const cupcakeRouter = require('./routes/cupcakeRoutes');
 
 const app = express();
 
@@ -11,9 +12,6 @@ app.use(express.json());
 ///////////////////////////////////////////////////////////////////////////////
 // ROUTES
 ///////////////////////////////////////////////////////////////////////////////
-
-app.route('/').get((req, res) => {
-    res.send('This is the cupcake store responding');
-});
+app.use('/api/v2/cupcake', cupcakeRouter);
 
 module.exports = app;
