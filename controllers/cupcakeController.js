@@ -1,4 +1,33 @@
+const { fail } = require('assert');
 const Cupcake = require('./../models/cupcakeModel');
+
+exports.checkID = async (req, res, next, val) => {
+    const id = parseInt(val);
+
+    try {
+        if (!id) {
+            return res.status(400).json({
+                status: 'fail',
+                message: 'Invlid ID supplied'
+            });
+        }
+
+        const cupcakes = await Cupcake.find();
+        if (id <= 0 || id > cupcakes.length) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Cupcake not found'
+            });
+        }
+    } catch (err) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Invalid ID supplied'
+        });
+    }
+
+    next();
+};
 
 exports.listCupcakes = async (req, res) => {
     try {
@@ -21,6 +50,8 @@ exports.listCupcakes = async (req, res) => {
 
 exports.addCupcake = async (req, res) => {
     try {
+        const cupcakes = await Cupcake.find();
+        req.body._id = Math.max(cupcakes.map(cupcake => cupcake._id)) + 1 || 1;
         const cupcake = await Cupcake.create(req.body);
 
         res.status(201).json({
@@ -30,9 +61,9 @@ exports.addCupcake = async (req, res) => {
             }
         });
     } catch (err) {
-        res.status(404).json({
+        res.status(405).json({
             status: 'fail',
-            message: err
+            message: 'Invalid input'
         });
     }
 };
@@ -50,7 +81,7 @@ exports.getCupcakeById = async (req, res) => {
     } catch (err) {
         res.status(404).json({
             status: 'fail',
-            message: err
+            message: 'Cupcake not found'
         });
     }
 };
@@ -70,9 +101,9 @@ exports.updateCupcake = async (req, res) => {
             }
         });
     } catch (err) {
-        res.status(404).json({
+        res.status(405).json({
             status: 'fail',
-            message: err
+            message: 'Validation exception'
         });
     }
 };
@@ -86,9 +117,9 @@ exports.deleteCupcake = async (req, res) => {
             data: null
         });
     } catch (err) {
-        res.status(400).json({
+        res.status(404).json({
             status: 'fail',
-            message: err
+            message: 'Cupcake not found'
         });
     }
 };

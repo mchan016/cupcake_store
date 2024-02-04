@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const cupcakeSchema = new mongoose.Schema({
+    _id: {
+        type: Number,
+        required: [true, 'A unique id must be assigned'],
+        min: [1, 'ID starts at 1 and upwards']
+    },
     name: {
         type: String,
         required: [true, 'A cupcake must be named'],
