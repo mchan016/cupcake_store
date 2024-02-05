@@ -3,9 +3,8 @@ const dotenv = require('dotenv');
 dotenv.config({path: './config.env'});
 const app = require('./app');
 
-// TODO: Refactor to connect locally once api server functionality works
 // Connect to database
-const DB = process.env.ATLAS.replace('<PASSWORD>', process.env.ATLAS_PASSWORD);
+const DB = process.env.DATABASE_LOCAL.replace('<DATABASE_NETWORK>', process.env.DATABASE_NETWORK);
 mongoose.connect(DB)
     .then(() => console.log('DB Connection successful!'));
 
