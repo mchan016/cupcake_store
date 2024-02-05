@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  cupcake-database:
+    image: docker.io/mongodb/mongodb-community-server:7.0.5-ubi8
+  cupcake-server:
+    image: docker.io/mchan016/cupcake-server:v1.0
+    ports:
+      - "3000:8000"
+    depends_on:
+      - cupcake-database
